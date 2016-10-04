@@ -1,0 +1,6 @@
+[package]
+name = "bench-escape"
+version = "0.1.0"
+authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
+
+[dependencies]
