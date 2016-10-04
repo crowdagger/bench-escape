@@ -13,11 +13,9 @@ mod escape_cow;
 mod escape_regex;
 
 const NO_HTML_SHORT: &'static str = "A paragraph without HTML characters that need to be escaped.";
-const NO_HTML_LONG: &'static str = "Another paragraph without characters that need to be escaped.
-This paragraph is a bit longer, as sometimes there can be large paragraphs that don't contain
-any special characters, e.g. in novels or whatever.";
-const HTML_SHORT: &'static str = "fn foo(u: &u32) -> &u32 { u }";
-const HTML_LONG: &'static str = "A somewhat longer paragraph containing a character that needs to be escaped, because e.g. the author mentions the movie 'Fast&Furious' in it.";
+const NO_HTML_LONG: &'static str = "Another paragraph without characters that need to be escaped. This paragraph is a bit longer, as sometimes there can be large paragraphs that don't any special characters, e.g. in novels or whatever.";
+const HTML_SHORT: &'static str = "Here -> An <<example>> of rust codefn foo(u: &u32) -> &u32 {u}";
+const HTML_LONG: &'static str = "A somewhat longer paragraph containing a character that needs to be escaped, because e.g. the author mentions the movie 'Fast&Furious' in it. This paragraph is also quite long, isn't it? ";
 
 #[bench]
 fn bench_naive_no_html(b: &mut Bencher) {
@@ -208,7 +206,7 @@ fn bench_regex_no_html(b: &mut Bencher) {
 }
 
 #[bench]
-fn bench_regex_find_html(b: &mut Bencher) {
+fn bench_regex_html(b: &mut Bencher) {
     use escape_regex::find;
     b.iter(|| {
         find(HTML_SHORT);
@@ -217,12 +215,72 @@ fn bench_regex_find_html(b: &mut Bencher) {
 }
 
 #[bench]
-fn bench_regex_find_all(b: &mut Bencher) {
-    use escape_regex::find;
+fn bench_regex_all(b: &mut Bencher) {
+    use escape_regex::find_no_static;
     b.iter(|| {
-        find(NO_HTML_SHORT);
-        find(NO_HTML_LONG);
-        find(HTML_SHORT);
-        find(HTML_LONG);
+        find_no_static(NO_HTML_SHORT);
+        find_no_static(NO_HTML_LONG);
+        find_no_static(HTML_SHORT);
+        find_no_static(HTML_LONG);
+    })
+}
+
+
+#[bench]
+fn bench_regex_no_static_no_html(b: &mut Bencher) {
+    use escape_regex::find_no_static;
+    b.iter(|| {
+        find_no_static(NO_HTML_SHORT);
+        find_no_static(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_no_static_html(b: &mut Bencher) {
+    use escape_regex::find_no_static;
+    b.iter(|| {
+        find_no_static(HTML_SHORT);
+        find_no_static(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_no_static_all(b: &mut Bencher) {
+    use escape_regex::find_no_static;
+    b.iter(|| {
+        find_no_static(NO_HTML_SHORT);
+        find_no_static(NO_HTML_LONG);
+        find_no_static(HTML_SHORT);
+        find_no_static(HTML_LONG);
+    })
+}
+
+
+#[bench]
+fn bench_regex_no_reserve_no_html(b: &mut Bencher) {
+    use escape_regex::find_no_reserve;
+    b.iter(|| {
+        find_no_reserve(NO_HTML_SHORT);
+        find_no_reserve(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_no_reserve_html(b: &mut Bencher) {
+    use escape_regex::find_no_reserve;
+    b.iter(|| {
+        find_no_reserve(HTML_SHORT);
+        find_no_reserve(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_no_reserve_all(b: &mut Bencher) {
+    use escape_regex::find_no_reserve;
+    b.iter(|| {
+        find_no_reserve(NO_HTML_SHORT);
+        find_no_reserve(NO_HTML_LONG);
+        find_no_reserve(HTML_SHORT);
+        find_no_reserve(HTML_LONG);
     })
 }
