@@ -134,6 +134,33 @@ pub fn find_u8<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
     }
 }
 
+
+pub fn find_u8_morecap<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
+    lazy_static! {
+        static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
+    }
+    let input = input.into();
+    let first = REGEX.find(&input);
+    if let Some((first, _)) = first {
+        let mut output:Vec<u8> = Vec::from(input[0..first].as_bytes());
+        let len = input.len();
+        output.reserve(len + len/2 - first);
+        let rest = input[first..].bytes();
+        for c in rest {
+            match c {
+                b'<' => output.extend_from_slice(b"&lt;"),
+                b'>' => output.extend_from_slice(b"&gt;"),
+                b'&' => output.extend_from_slice(b"&amp;"),
+                _ => output.push(c),
+            }
+        }
+
+        Cow::Owned(String::from_utf8(output).unwrap())
+    } else {
+        input.into()
+    }
+}
+
 pub fn find_u8_iter<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
     lazy_static! {
         static ref REGEX: Regex = Regex::new("[<>&]").unwrap();

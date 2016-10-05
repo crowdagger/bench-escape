@@ -137,6 +137,36 @@ fn bench_cow_find_all(b: &mut Bencher) {
 
 
 #[bench]
+fn bench_cow_find_morecap_no_html(b: &mut Bencher) {
+    use escape_cow::find_morecap;
+    b.iter(|| {
+        find_morecap(NO_HTML_SHORT);
+        find_morecap(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_cow_find_morecap_html(b: &mut Bencher) {
+    use escape_cow::find_morecap;
+    b.iter(|| {
+        find_morecap(HTML_SHORT);
+        find_morecap(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_cow_find_morecap_all(b: &mut Bencher) {
+    use escape_cow::find_morecap;
+    b.iter(|| {
+        find_morecap(NO_HTML_SHORT);
+        find_morecap(NO_HTML_LONG);
+        find_morecap(HTML_SHORT);
+        find_morecap(HTML_LONG);
+    })
+}
+
+
+#[bench]
 fn bench_cow_find_recursive_no_html(b: &mut Bencher) {
     use escape_cow::find_recursive;
     b.iter(|| {
@@ -430,6 +460,36 @@ fn bench_regex_u8_all(b: &mut Bencher) {
         find_u8(NO_HTML_LONG);
         find_u8(HTML_SHORT);
         find_u8(HTML_LONG);
+    })
+}
+
+
+#[bench]
+fn bench_regex_u8_morecap_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8_morecap;
+    b.iter(|| {
+        find_u8_morecap(NO_HTML_SHORT);
+        find_u8_morecap(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_morecap_html(b: &mut Bencher) {
+    use escape_regex::find_u8_morecap;
+    b.iter(|| {
+        find_u8_morecap(HTML_SHORT);
+        find_u8_morecap(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_morecap_all(b: &mut Bencher) {
+    use escape_regex::find_u8_morecap;
+    b.iter(|| {
+        find_u8_morecap(NO_HTML_SHORT);
+        find_u8_morecap(NO_HTML_LONG);
+        find_u8_morecap(HTML_SHORT);
+        find_u8_morecap(HTML_LONG);
     })
 }
 
