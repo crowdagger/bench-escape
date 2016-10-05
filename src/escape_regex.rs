@@ -1,4 +1,5 @@
 use regex::Regex;
+use regex::Captures;
 use std::borrow::Cow;
 
 pub fn find<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
@@ -72,4 +73,20 @@ pub fn find_no_reserve<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
     } else {
         input.into()
     }
+}
+
+
+pub fn replace(input: &str) -> String {
+    lazy_static! {
+        static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
+    }
+    let output = REGEX.replace_all(input, |caps: &Captures| {
+        match caps.at(0).unwrap() {
+            "<" => "&lt;".to_owned(),
+            ">" => "&gt;".to_owned(),
+            "&" => "&amp;".to_owned(),
+            _ => unreachable!()
+        }
+    });
+    output
 }
