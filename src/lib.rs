@@ -227,6 +227,65 @@ fn bench_regex_all(b: &mut Bencher) {
 
 
 #[bench]
+fn bench_regex_capacity_no_html(b: &mut Bencher) {
+    use escape_regex::find_capacity;
+    b.iter(|| {
+        find_capacity(NO_HTML_SHORT);
+        find_capacity(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_capacity_html(b: &mut Bencher) {
+    use escape_regex::find_capacity;
+    b.iter(|| {
+        find_capacity(HTML_SHORT);
+        find_capacity(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_capacity_all(b: &mut Bencher) {
+    use escape_regex::find_capacity;
+    b.iter(|| {
+        find_capacity(NO_HTML_SHORT);
+        find_capacity(NO_HTML_LONG);
+        find_capacity(HTML_SHORT);
+        find_capacity(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_iter_no_html(b: &mut Bencher) {
+    use escape_regex::find_iter;
+    b.iter(|| {
+        find_iter(NO_HTML_SHORT);
+        find_iter(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_iter_html(b: &mut Bencher) {
+    use escape_regex::find_iter;
+    b.iter(|| {
+        find_iter(HTML_SHORT);
+        find_iter(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_iter_all(b: &mut Bencher) {
+    use escape_regex::find_iter;
+    b.iter(|| {
+        find_iter(NO_HTML_SHORT);
+        find_iter(NO_HTML_LONG);
+        find_iter(HTML_SHORT);
+        find_iter(HTML_LONG);
+    })
+}
+
+
+#[bench]
 fn bench_regex_no_static_no_html(b: &mut Bencher) {
     use escape_regex::find_no_static;
     b.iter(|| {
@@ -312,5 +371,63 @@ fn bench_regex_replace_all(b: &mut Bencher) {
         replace(NO_HTML_LONG);
         replace(HTML_SHORT);
         replace(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8;
+    b.iter(|| {
+        find_u8(NO_HTML_SHORT);
+        find_u8(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_html(b: &mut Bencher) {
+    use escape_regex::find_u8;
+    b.iter(|| {
+        find_u8(HTML_SHORT);
+        find_u8(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_all(b: &mut Bencher) {
+    use escape_regex::find_u8;
+    b.iter(|| {
+        find_u8(NO_HTML_SHORT);
+        find_u8(NO_HTML_LONG);
+        find_u8(HTML_SHORT);
+        find_u8(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_capacity_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8_capacity;
+    b.iter(|| {
+        find_u8_capacity(NO_HTML_SHORT);
+        find_u8_capacity(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_capacity_html(b: &mut Bencher) {
+    use escape_regex::find_u8_capacity;
+    b.iter(|| {
+        find_u8_capacity(HTML_SHORT);
+        find_u8_capacity(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_capacity_all(b: &mut Bencher) {
+    use escape_regex::find_u8_capacity;
+    b.iter(|| {
+        find_u8_capacity(NO_HTML_SHORT);
+        find_u8_capacity(NO_HTML_LONG);
+        find_u8_capacity(HTML_SHORT);
+        find_u8_capacity(HTML_LONG);
     })
 }
