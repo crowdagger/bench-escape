@@ -552,6 +552,36 @@ fn bench_regex_u8_unsafe_all(b: &mut Bencher) {
     })
 }
 
+
+#[bench]
+fn bench_regex_u8_unsafe_morecap_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe_morecap;
+    b.iter(|| {
+        find_u8_unsafe_morecap(NO_HTML_SHORT);
+        find_u8_unsafe_morecap(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_unsafe_morecap_html(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe_morecap;
+    b.iter(|| {
+        find_u8_unsafe_morecap(HTML_SHORT);
+        find_u8_unsafe_morecap(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_unsafe_morecap_all(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe_morecap;
+    b.iter(|| {
+        find_u8_unsafe_morecap(NO_HTML_SHORT);
+        find_u8_unsafe_morecap(NO_HTML_LONG);
+        find_u8_unsafe_morecap(HTML_SHORT);
+        find_u8_unsafe_morecap(HTML_LONG);
+    })
+}
+
 #[bench]
 fn bench_regex_u8_capacity_no_html(b: &mut Bencher) {
     use escape_regex::find_u8_capacity;
