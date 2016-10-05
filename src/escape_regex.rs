@@ -80,6 +80,35 @@ pub fn find_iter<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
     }
 }
 
+pub fn find_iter_morecap<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
+    lazy_static! {
+        static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
+    }
+    let input = input.into();
+
+    if REGEX.is_match(&input)
+    {
+        let mut last_match = 0;
+        let len = input.len();
+        let matches = REGEX.find_iter(&input);
+        let mut output = String::with_capacity(len + len / 2);
+        for (begin, end) in matches {
+            output.push_str(&input[last_match..begin]);
+            match &input[begin..end] {
+                "<" => output.push_str("&lt;"),
+                ">" => output.push_str("&gt;"),
+                "&" => output.push_str("&amp;"),
+                _ => unreachable!()
+            }
+            last_match = end;
+        }
+        output.push_str(&input[last_match..]);
+        Cow::Owned(output)
+    } else {
+        input
+    }
+}
+
 pub fn find_u8<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
     lazy_static! {
         static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
@@ -100,6 +129,58 @@ pub fn find_u8<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
         }
 
         Cow::Owned(String::from_utf8(output).unwrap())
+    } else {
+        input.into()
+    }
+}
+
+pub fn find_u8_iter<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
+    lazy_static! {
+        static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
+    }
+    let input = input.into();
+    if REGEX.is_match(&input) {
+        let matches = REGEX.find_iter(&input);
+        let input = input.as_bytes();
+        let mut last_match = 0;
+        let mut output:Vec<u8> = Vec::with_capacity(input.len());
+        for (begin, end) in matches {
+            output.extend_from_slice(&input[last_match..begin]);
+            match input[begin] {
+                b'<' => output.extend_from_slice(b"&lt;"),
+                b'>' => output.extend_from_slice(b"&gt;"),
+                b'&' => output.extend_from_slice(b"&amp;"),
+                _ => unreachable!()
+            }
+            last_match = end;
+        }
+        output.extend_from_slice(&input[last_match..]);
+        Cow::Owned(String::from_utf8(output).unwrap())
+    } else {
+        input.into()
+    }
+}
+
+pub fn find_u8_unsafe<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
+    lazy_static! {
+        static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
+    }
+    let input = input.into();
+    let first = REGEX.find(&input);
+    if let Some((first, _)) = first {
+        let mut output:Vec<u8> = Vec::from(input[0..first].as_bytes());
+        output.reserve(input.len() - first);
+        let rest = input[first..].bytes();
+        for c in rest {
+            match c {
+                b'<' => output.extend_from_slice(b"&lt;"),
+                b'>' => output.extend_from_slice(b"&gt;"),
+                b'&' => output.extend_from_slice(b"&amp;"),
+                _ => output.push(c),
+            }
+        }
+
+        Cow::Owned(unsafe { String::from_utf8_unchecked(output) })
     } else {
         input.into()
     }

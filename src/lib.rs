@@ -286,6 +286,36 @@ fn bench_regex_iter_all(b: &mut Bencher) {
 
 
 #[bench]
+fn bench_regex_iter_morecap_no_html(b: &mut Bencher) {
+    use escape_regex::find_iter_morecap;
+    b.iter(|| {
+        find_iter_morecap(NO_HTML_SHORT);
+        find_iter_morecap(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_iter_morecap_html(b: &mut Bencher) {
+    use escape_regex::find_iter_morecap;
+    b.iter(|| {
+        find_iter_morecap(HTML_SHORT);
+        find_iter_morecap(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_iter_morecap_all(b: &mut Bencher) {
+    use escape_regex::find_iter_morecap;
+    b.iter(|| {
+        find_iter_morecap(NO_HTML_SHORT);
+        find_iter_morecap(NO_HTML_LONG);
+        find_iter_morecap(HTML_SHORT);
+        find_iter_morecap(HTML_LONG);
+    })
+}
+
+
+#[bench]
 fn bench_regex_no_static_no_html(b: &mut Bencher) {
     use escape_regex::find_no_static;
     b.iter(|| {
@@ -400,6 +430,65 @@ fn bench_regex_u8_all(b: &mut Bencher) {
         find_u8(NO_HTML_LONG);
         find_u8(HTML_SHORT);
         find_u8(HTML_LONG);
+    })
+}
+
+
+#[bench]
+fn bench_regex_u8_iter_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8_iter;
+    b.iter(|| {
+        find_u8_iter(NO_HTML_SHORT);
+        find_u8_iter(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_iter_html(b: &mut Bencher) {
+    use escape_regex::find_u8_iter;
+    b.iter(|| {
+        find_u8_iter(HTML_SHORT);
+        find_u8_iter(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_iter_all(b: &mut Bencher) {
+    use escape_regex::find_u8_iter;
+    b.iter(|| {
+        find_u8_iter(NO_HTML_SHORT);
+        find_u8_iter(NO_HTML_LONG);
+        find_u8_iter(HTML_SHORT);
+        find_u8_iter(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_unsafe_no_html(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe;
+    b.iter(|| {
+        find_u8_unsafe(NO_HTML_SHORT);
+        find_u8_unsafe(NO_HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_unsafe_html(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe;
+    b.iter(|| {
+        find_u8_unsafe(HTML_SHORT);
+        find_u8_unsafe(HTML_LONG);
+    })
+}
+
+#[bench]
+fn bench_regex_u8_unsafe_all(b: &mut Bencher) {
+    use escape_regex::find_u8_unsafe;
+    b.iter(|| {
+        find_u8_unsafe(NO_HTML_SHORT);
+        find_u8_unsafe(NO_HTML_LONG);
+        find_u8_unsafe(HTML_SHORT);
+        find_u8_unsafe(HTML_LONG);
     })
 }
 
