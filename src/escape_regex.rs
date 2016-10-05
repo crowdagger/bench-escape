@@ -57,16 +57,13 @@ pub fn find_iter<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
         static ref REGEX: Regex = Regex::new("[<>&]").unwrap();
     }
     let input = input.into();
-    let len = input.len();
-    let mut last_match = 0;
-    let mut output = String::new();
+     let mut last_match = 0;
 
+    if REGEX.is_match(&input)
     {
         let matches = REGEX.find_iter(&input);
+        let mut output = String::with_capacity(input.len());
         for (begin, end) in matches {
-            if last_match == 0 {
-                output.reserve(len);
-            }
             output.push_str(&input[last_match..begin]);
             match &input[begin..end] {
                 "<" => output.push_str("&lt;"),
@@ -76,8 +73,6 @@ pub fn find_iter<'a, S: Into<Cow<'a, str>>>(input: S) -> Cow<'a, str> {
             }
             last_match = end;
         }
-    }
-    if last_match != 0 {
         output.push_str(&input[last_match..]);
         Cow::Owned(output)
     } else {
